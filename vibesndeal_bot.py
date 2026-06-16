@@ -65,6 +65,26 @@ logger = logging.getLogger(__name__)
 #     client = gspread.authorize(creds)
 #     sheet = client.open(GOOGLE_SHEET_NAME).sheet1
 #     return sheet
+# def connect_to_sheet():
+#     import os
+#     import json
+#     scopes = [
+#         "https://www.googleapis.com/auth/spreadsheets",
+#         "https://www.googleapis.com/auth/drive"
+#     ]
+#     creds_json = os.environ.get("GOOGLE_CREDENTIALS")
+#     if creds_json:
+#         creds_dict = json.loads(creds_json)
+#         creds = Credentials.from_service_account_info(creds_dict, scopes=scopes)
+#     else:
+#         creds = Credentials.from_service_account_file(CREDENTIALS_FILE, scopes=scopes)
+    
+#     client = gspread.authorize(creds)
+    
+#     # Open by name and access first sheet
+#     spreadsheet = client.open(GOOGLE_SHEET_NAME)
+#     sheet = spreadsheet.sheet1
+#     return sheet
 def connect_to_sheet():
     import os
     import json
@@ -72,16 +92,18 @@ def connect_to_sheet():
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive"
     ]
+    
     creds_json = os.environ.get("GOOGLE_CREDENTIALS")
+    
     if creds_json:
+        # Running on Railway — use environment variable
         creds_dict = json.loads(creds_json)
         creds = Credentials.from_service_account_info(creds_dict, scopes=scopes)
     else:
+        # Running locally — use credentials.json file
         creds = Credentials.from_service_account_file(CREDENTIALS_FILE, scopes=scopes)
     
     client = gspread.authorize(creds)
-    
-    # Open by name and access first sheet
     spreadsheet = client.open(GOOGLE_SHEET_NAME)
     sheet = spreadsheet.sheet1
     return sheet
