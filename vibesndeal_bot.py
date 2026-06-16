@@ -99,12 +99,35 @@ def get_pending_deals(sheet):
     return pending
 
 
+# def mark_as_posted(sheet, row_number):
+#     """Mark a deal as posted in the sheet."""
+#     # Column H = Posted, Column I = Posted On
+#     sheet.update_cell(row_number, 8, "Yes")
+#     sheet.update_cell(row_number, 9, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+#     logger.info(f"Marked row {row_number} as Posted.")
+
 def mark_as_posted(sheet, row_number):
     """Mark a deal as posted in the sheet."""
-    # Column H = Posted, Column I = Posted On
-    sheet.update_cell(row_number, 8, "Yes")
-    sheet.update_cell(row_number, 9, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    logger.info(f"Marked row {row_number} as Posted.")
+    try:
+        # Get headers to find correct column numbers dynamically
+        headers = sheet.row_values(1)
+        logger.info(f"Sheet headers found: {headers}")
+        
+        posted_col = headers.index("Posted") + 1
+        posted_on_col = headers.index("Posted On") + 1
+        
+        logger.info(f"Updating row {row_number} - Posted col: {posted_col}, Posted On col: {posted_on_col}")
+        
+        sheet.update_cell(row_number, posted_col, "Yes")
+        sheet.update_cell(row_number, posted_on_col,
+                         datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        
+        logger.info(f"✅ Successfully marked row {row_number} as Posted.")
+
+    except ValueError as e:
+        logger.error(f"❌ Column header not found: {e}")
+    except Exception as e:
+        logger.error(f"❌ Error marking row as posted: {e}")
 
 # ============================================================
 # MESSAGE FORMATTER
@@ -159,20 +182,17 @@ def format_deal_message(deal):
         message = f"""
     🚨 *MEGA PRICE DROP* 🔥 *{discount} OFF*
 
-    {emoji} *{name}* @*{discounted}* MRP: ~~{original}~~
+    {emoji} *{name}* @ *{discounted}* MRP: ~~{original}~~
 
     👉 {link}
-
     """
     else:
         message = f"""
-    🔥 *DEAL ALERT* 🔥*{discount} OFF*
+    🔥 *DEAL ALERT* 🔥 *{discount} OFF*
 
-    🛍️ *{name}* @*{discounted}*
+    🛍️ *{name}* @ *{discounted}*
 
     👉 {link}
-
-    # 📢 *Share @VibesNDeals with friends!*
     """
     return message.strip()
 
