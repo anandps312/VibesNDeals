@@ -38,7 +38,7 @@ TELEGRAM_CHANNEL_ID = os.environ.get("TELEGRAM_CHANNEL_ID")
 GOOGLE_SHEET_NAME = os.environ.get("GOOGLE_SHEET_NAME")
 CREDENTIALS_FILE = "credentials.json"                # Downloaded from Google Cloud
 POST_INTERVAL_HOURS = 3                              # How often to post (in hours)
-PEAK_HOURS_ONLY = False                              # Only post between 8AM - 11PM IST
+PEAK_HOURS_ONLY = True                              # Only post between 8AM - 11PM IST
 MAX_POSTS_PER_RUN = 2                                # Max deals to post per run
 
 # ============================================================
