@@ -180,10 +180,15 @@ def format_deal_message(deal):
 # PEAK HOURS CHECK
 # ============================================================
 
+# def is_peak_hour():
+#     """Check if current IST time is within peak hours (8 AM - 11 PM)."""
+#     now_hour = datetime.now().hour  # Assumes server is in IST
+#     return 8 <= now_hour <= 23
 def is_peak_hour():
-    """Check if current IST time is within peak hours (8 AM - 11 PM)."""
-    now_hour = datetime.now().hour  # Assumes server is in IST
-    return 8 <= now_hour <= 23
+    from datetime import timezone, timedelta
+    IST = timezone(timedelta(hours=5, minutes=30))
+    now_hour = datetime.now(IST).hour
+    return 8 <= now_hour <= 23 
 
 # ============================================================
 # MAIN POSTING LOGIC
